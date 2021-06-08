@@ -6,7 +6,7 @@
 ShowStream::ShowStream(QWidget *parent)
     : QWidget(parent)
 {
-    m_thread = new GrabStream(this);
+    m_thread = new GrabStream;
     connect(m_thread, &GrabStream::sigSendFrame, this, &ShowStream::slotGetFrame);
 
     m_startBtn = new QPushButton;
@@ -41,7 +41,7 @@ ShowStream::ShowStream(QWidget *parent)
 
 ShowStream::~ShowStream()
 {
-    m_thread->setStop();
+//    m_thread->setStop();
 }
 
 void ShowStream::setShowWidgetDefault()
@@ -49,13 +49,11 @@ void ShowStream::setShowWidgetDefault()
     scene->clear();
     scene->addPixmap(QPixmap("C:/Users/Kris/Pictures/test/no_image320240.png"));
     scene->update();
-    view->setScene(scene);
 }
 
 void ShowStream::slotStartBtnclicked()
 {
     qDebug() << "start";
-
     if (!m_thread->isRunning())
     {
         m_thread->setRunning();
@@ -66,7 +64,6 @@ void ShowStream::slotStartBtnclicked()
 void ShowStream::slotPauseBtnclicked()
 {
     m_thread->setPause();
-
 }
 
 void ShowStream::slotResumeBtnclicked()
@@ -76,7 +73,15 @@ void ShowStream::slotResumeBtnclicked()
 
 void ShowStream::slotStopBtnclicked()
 {
+    // clear memory results in bugs
+    // ASSERT failure in QMutexLocker: "QMutex pointer is misaligned",
     m_thread->setStop();
+//    if (!m_thread->isRunning())
+//    {
+//        setShowWidgetDefault();
+//    }
+    setShowWidgetDefault();
+    qDebug() << "quit slotStopBtnclicked";
 }
 
 void ShowStream::slotGetFrame(QImage color, QImage depth)

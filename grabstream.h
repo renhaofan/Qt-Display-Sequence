@@ -5,10 +5,7 @@
 #include <QThread>
 #include <QObject>
 #include <QImage>
-// to solve cpu working problem when pause
-#include <atomic>
-#include <QMutex>
-#include <QWaitCondition>
+
 
 // reference: https://blog.csdn.net/wzz953200463/article/details/108752377
 // reference: https://blog.csdn.net/zyhse/article/details/106307616
@@ -37,7 +34,6 @@ public:
     void setPause();
     void setResume();
 
-    Status getRunStatus();
 
 
 
@@ -48,7 +44,6 @@ protected:
 private:
     Status m_runStatus{Status::STOP};
 
-
     int m_frameIndex{0};
 
     QImage m_colorQImage;
@@ -56,8 +51,7 @@ private:
     QString m_fileName{"C:/Users/Kris/Pictures/out/depth/"};
 
 
-    QMutex mutex;
-    QWaitCondition condition;
+
 };
 
 

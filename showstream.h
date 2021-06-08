@@ -8,6 +8,11 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
+// to solve cpu working problem when pause
+#include <atomic>
+#include <QMutex>
+#include <QWaitCondition>
+
 class ShowStream : public QWidget
 {
     Q_OBJECT
@@ -43,6 +48,8 @@ private:
 
     QVBoxLayout *vlayout;
 
+    QMutex mutex;
+    QWaitCondition condition;
 
     void setShowWidgetDefault();
 };

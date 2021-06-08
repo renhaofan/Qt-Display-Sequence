@@ -27,6 +27,7 @@ void GrabStream::setRunning()
 
 void GrabStream::setStop()
 {
+    qDebug() << "Enter setStop Function";
     if (this->isRunning())
     {
         m_runStatus = Status::STOP;
@@ -35,6 +36,7 @@ void GrabStream::setStop()
 //        this->wait(); // wait until quit
 //        this->deleteLater(); // release cpu memory
     }
+    qDebug() << "Exit setStop Function";
 }
 
 void GrabStream::setPause()
@@ -47,10 +49,6 @@ void GrabStream::setResume()
     m_runStatus = Status::RESUME;
 }
 
-GrabStream::Status GrabStream::getRunStatus()
-{
-    return m_runStatus;
-}
 
 void GrabStream::run()
 {
@@ -65,8 +63,10 @@ void GrabStream::run()
 
     while (true)
     {
+        qDebug() << "thread run():";
         if (m_runStatus == Status::RUNNING)
         {
+            qDebug() << "1:";
             m_depthQImage.load(m_fileName + QString::number(m_frameIndex++)+".png");
             // if grab frame is empty, don't send signal
             if (m_depthQImage.isNull())
@@ -78,10 +78,12 @@ void GrabStream::run()
         }
         else if (m_runStatus == Status::PAUSE)
         {
+            qDebug() << "2:";
 //            qDebug() << "pause to grab stream";
         }
         else if (m_runStatus == Status::RESUME)
         {
+            qDebug() << "3:";
 //            qDebug() << "resume stream";
 
             m_depthQImage.load(m_fileName + QString::number(m_frameIndex++)+".png");
@@ -96,12 +98,15 @@ void GrabStream::run()
         }
         else if (m_runStatus == Status::STOP)
         {
-
+            qDebug() << "4:";
             qDebug() << "stop to grab stream";
+//            m_depthQImage.load("C:/Users/Kris/Pictures/test/no_image320240.png");
+//            emit sigSendFrame(m_colorQImage, m_depthQImage);
             break;
         }
         else
         {
+            qDebug() << "5:";
             //  work when no definiton of macro QT_NO_DEBUG
             Q_ASSERT_X(false, "Error", "ERROR to grab stream");
             qDebug() << "ERROR to grab stream";
@@ -109,4 +114,5 @@ void GrabStream::run()
     }
 
     qDebug() << "exit thread : " << QThread::currentThreadId();
+
 }
