@@ -27,12 +27,12 @@ ShowStream::ShowStream(QWidget *parent)
     connect(m_clearBtn, &QPushButton::clicked, this, &ShowStream::slotClearBtnclicked);
 
     m_sceneColor = new QGraphicsScene;
-    m_sceneColor->addPixmap(QPixmap("C:/Users/Kris/Pictures/test/no_image320240.png"));
+    m_sceneColor->addPixmap(QPixmap(":/default/images/no_image320240.png"));
     m_viewColor = new QGraphicsView(m_sceneColor);
 //    m_viewColor->setStyleSheet("padding: 0px; border: 0px;");
 
     m_sceneDepth = new QGraphicsScene;
-    m_sceneDepth->addPixmap(QPixmap("C:/Users/Kris/Pictures/test/no_image320240.png"));
+    m_sceneDepth->addPixmap(QPixmap(":/default/images/no_image320240.png"));
     m_viewDepth = new QGraphicsView(m_sceneDepth);
 //    m_viewDepth->setStyleSheet("padding: 0px; border: 0px;");
 
@@ -61,11 +61,11 @@ ShowStream::~ShowStream()
 void ShowStream::setShowWidgetDefault()
 {
     m_sceneColor->clear();
-    m_sceneColor->addPixmap(QPixmap("C:/Users/Kris/Pictures/test/no_image320240.png"));
+    m_sceneColor->addPixmap(QPixmap(":/default/images/no_image320240.png"));
     m_sceneColor->update();
 
     m_sceneDepth->clear();
-    m_sceneDepth->addPixmap(QPixmap("C:/Users/Kris/Pictures/test/no_image320240.png"));
+    m_sceneDepth->addPixmap(QPixmap(":/default/images/no_image320240.png"));
     m_sceneDepth->update();
 
 }
