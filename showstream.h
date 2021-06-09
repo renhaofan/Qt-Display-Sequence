@@ -27,7 +27,7 @@ private slots:
     void slotPauseBtnclicked();
     void slotResumeBtnclicked();
     void slotStopBtnclicked();
-
+    void slotClearBtnclicked();
 
 
 private:
@@ -35,13 +35,18 @@ private:
     QPushButton *m_pauseBtn;
     QPushButton *m_resumeBtn;
     QPushButton *m_stopBtn;
+    QPushButton *m_clearBtn;
 
 
 
     GrabStream *m_thread;
 
-    QGraphicsScene *scene;
-    QGraphicsView *view;
+    QGraphicsScene *m_sceneColor;
+    QGraphicsScene *m_sceneDepth;
+
+    QGraphicsView *m_viewColor;
+    QGraphicsView *m_viewDepth;
+
 
     QImage m_sideColor;
     QImage m_sideDepth;

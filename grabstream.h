@@ -25,8 +25,7 @@ public:
         ERROR,
         STOP,
         RUNNING,
-        PAUSE,
-        RESUME
+        PAUSE
     };
 
     void setStop();
@@ -35,7 +34,7 @@ public:
     void setResume();
 
 
-
+    void printStatus();
 
 
 protected:
@@ -48,8 +47,10 @@ private:
 
     QImage m_colorQImage;
     QImage m_depthQImage;
-    QString m_fileName{"C:/Users/Kris/Pictures/out/depth/"};
 
+
+    QString m_fileName{"C:/Users/Kris/Pictures/out/"};
+//    QString m_fileName{"C:/Users/Kris/Pictures/out/Frames/"};
 
 
 };

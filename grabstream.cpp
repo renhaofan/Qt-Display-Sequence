@@ -46,9 +46,31 @@ void GrabStream::setPause()
 
 void GrabStream::setResume()
 {
-    m_runStatus = Status::RESUME;
+    m_runStatus = Status::RUNNING;
 }
 
+void GrabStream::printStatus()
+{
+    auto tmp_status = static_cast<std::underlying_type<Status>::type>(m_runStatus);
+    switch (tmp_status)
+    {
+        case 0:
+            qDebug() << "Status:ERROR";
+            break;
+        case 1:
+            qDebug() << "Status:STOP";
+            break;
+        case 2:
+            qDebug() << "Status:RUNNING";
+            break;
+        case 3:
+            qDebug() << "Status:PAUSE";
+            break;
+        default:
+            Q_ASSERT_X(false, "Error", "Unknown status");
+            break;
+    }
+}
 
 void GrabStream::run()
 {
@@ -63,53 +85,32 @@ void GrabStream::run()
 
     while (true)
     {
-        qDebug() << "thread run():";
         if (m_runStatus == Status::RUNNING)
         {
-            qDebug() << "1:";
-            m_depthQImage.load(m_fileName + QString::number(m_frameIndex++)+".png");
+            m_depthQImage.load(m_fileName + "depth/"+ QString::number(m_frameIndex)+".png");
+            m_colorQImage.load(m_fileName + "color/"+ QString::number(m_frameIndex)+".jpg");
             // if grab frame is empty, don't send signal
-            if (m_depthQImage.isNull())
+            if (m_depthQImage.isNull() || m_colorQImage.isNull())
             {
                 Q_ASSERT_X(false, "Error", "Failed to grab frame");
                 continue;;
             }
+            m_frameIndex++;
             emit sigSendFrame(m_colorQImage, m_depthQImage);
         }
         else if (m_runStatus == Status::PAUSE)
         {
-            qDebug() << "2:";
-//            qDebug() << "pause to grab stream";
-        }
-        else if (m_runStatus == Status::RESUME)
-        {
-            qDebug() << "3:";
-//            qDebug() << "resume stream";
-
-            m_depthQImage.load(m_fileName + QString::number(m_frameIndex++)+".png");
-            // if grab frame is empty, don't send signal
-            if (m_depthQImage.isNull())
-            {
-                Q_ASSERT_X(false, "Error", "Failed to grab frame");
-                continue;;
-            }
-            emit sigSendFrame(m_colorQImage, m_depthQImage);
-
         }
         else if (m_runStatus == Status::STOP)
         {
-            qDebug() << "4:";
             qDebug() << "stop to grab stream";
-//            m_depthQImage.load("C:/Users/Kris/Pictures/test/no_image320240.png");
-//            emit sigSendFrame(m_colorQImage, m_depthQImage);
             break;
         }
-        else
+        else if (m_runStatus == Status::ERROR)
         {
-            qDebug() << "5:";
             //  work when no definiton of macro QT_NO_DEBUG
-            Q_ASSERT_X(false, "Error", "ERROR to grab stream");
-            qDebug() << "ERROR to grab stream";
+            printStatus();
+            Q_ASSERT_X(false, "Error", "ERROR Status");
         }
     }
 
